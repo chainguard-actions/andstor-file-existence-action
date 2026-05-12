@@ -1,0 +1,22 @@
+name: Test file not exists
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          files: "this-file-does-not-exist-xyz123.txt"
+      - name: Assert files_exists is false
+        env:
+          ACTUAL: ${{ steps.action.outputs.files_exists }}
+        run: |
+          echo "actual: $ACTUAL"
+          if [ "$ACTUAL" != "false" ]; then
+            echo "FAIL: expected 'false' but got '$ACTUAL'"
+            exit 1
+          fi
+          echo "PASS"
