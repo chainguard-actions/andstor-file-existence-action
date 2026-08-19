@@ -1,0 +1,22 @@
+name: Test directory existence
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          files: "tests"
+      - name: Assert files_exists is true for existing directory
+        env:
+          ACTUAL: ${{ steps.action.outputs.files_exists }}
+        run: |
+          echo "actual: $ACTUAL"
+          if [ "$ACTUAL" != "true" ]; then
+            echo "FAIL: expected 'true' for existing directory, but got '$ACTUAL'"
+            exit 1
+          fi
+          echo "PASS"

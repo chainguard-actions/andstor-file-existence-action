@@ -1,4 +1,4 @@
-name: Test ignore_case option
+name: Test allow_failure deprecated input
 on:
   workflow_dispatch:
 jobs:
@@ -6,14 +6,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - id: action-case-insensitive
+
+      - name: Create a test file
+        run: |
+          echo "hello" > /tmp/existing-file.txt
+
+      - id: action
         uses: .
         with:
-          files: "tests/TEST-BASIC-EXISTS.YML"
-          ignore_case: "true"
-      - name: Assert files_exists is true with ignore_case (TEST-BASIC-EXISTS.YML matches test-basic-exists.yml)
+          files: /tmp/existing-file.txt
+          allow_failure: false
+
+      - name: Assert files_exists is true
         env:
-          ACTUAL: ${{ steps.action-case-insensitive.outputs.files_exists }}
+          ACTUAL: ${{ steps.action.outputs.files_exists }}
         run: |
           echo "actual: $ACTUAL"
           if [ "$ACTUAL" != "true" ]; then
