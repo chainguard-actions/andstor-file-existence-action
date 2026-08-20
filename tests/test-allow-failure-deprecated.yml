@@ -1,0 +1,26 @@
+name: Test allow_failure deprecated input
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          files: this-file-does-not-exist.txt
+          allow_failure: false
+        continue-on-error: true
+      - name: Assert files_exists is false for missing file
+        env:
+          FILES_EXISTS: ${{ steps.action.outputs.files_exists }}
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          echo "files_exists: $FILES_EXISTS"
+          if [ "$FILES_EXISTS" != "false" ]; then
+            echo "FAIL: expected files_exists to be 'false' but got '$FILES_EXISTS'"
+            exit 1
+          fi
+          echo "PASS: files_exists is false as expected"

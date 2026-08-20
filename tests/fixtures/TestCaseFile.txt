@@ -1,0 +1,1 @@
+This file has mixed case in its name for testing ignore_case option.

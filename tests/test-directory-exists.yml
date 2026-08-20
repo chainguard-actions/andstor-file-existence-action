@@ -1,4 +1,4 @@
-name: Test basic file existence (file exists)
+name: Test directory existence
 on:
   workflow_dispatch:
 jobs:
@@ -9,14 +9,14 @@ jobs:
       - id: action
         uses: .
         with:
-          files: "tests/fixtures/sample.txt"
-      - name: Assert files_exists is true
+          files: "tests/fixtures"
+      - name: Assert files_exists is true for existing directory
         env:
           ACTUAL: ${{ steps.action.outputs.files_exists }}
         run: |
           echo "actual: $ACTUAL"
           if [ "$ACTUAL" != "true" ]; then
-            echo "FAIL: expected 'true' but got '$ACTUAL'"
+            echo "FAIL: expected 'true' for existing directory but got '$ACTUAL'"
             exit 1
           fi
           echo "PASS"

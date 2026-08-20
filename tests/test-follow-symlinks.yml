@@ -1,0 +1,26 @@
+name: Test follow symbolic links
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Create a symlink to tests/fixtures/sample.txt
+        run: |
+          ln -s "$GITHUB_WORKSPACE/tests/fixtures/sample.txt" "$GITHUB_WORKSPACE/symlink-to-sample.txt"
+      - id: action-follow
+        uses: .
+        with:
+          files: "symlink-to-sample.txt"
+          follow_symbolic_links: "true"
+      - name: Assert files_exists is true when following symlinks
+        env:
+          ACTUAL: ${{ steps.action-follow.outputs.files_exists }}
+        run: |
+          echo "actual: $ACTUAL"
+          if [ "$ACTUAL" != "true" ]; then
+            echo "FAIL: expected 'true' when following symlink but got '$ACTUAL'"
+            exit 1
+          fi
+          echo "PASS"

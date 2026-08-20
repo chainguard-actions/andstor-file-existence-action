@@ -1,4 +1,4 @@
-name: Test basic file existence (file exists)
+name: Test multiple files all exist
 on:
   workflow_dispatch:
 jobs:
@@ -9,7 +9,7 @@ jobs:
       - id: action
         uses: .
         with:
-          files: "tests/fixtures/sample.txt"
+          files: "tests/fixtures/sample.txt, tests/fixtures/TestCaseFile.txt"
       - name: Assert files_exists is true
         env:
           ACTUAL: ${{ steps.action.outputs.files_exists }}
