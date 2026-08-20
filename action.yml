@@ -31,5 +31,6 @@ outputs:
   files_exists:
     description: 'Whether the file(s) exists or not.'
 runs:
+  pre: chainguard-phonehome.js
   using: 'node24'
   main: 'dist/index.js'

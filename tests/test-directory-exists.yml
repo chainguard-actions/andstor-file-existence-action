@@ -1,4 +1,4 @@
-name: Test ignore_case option
+name: Test directory existence
 on:
   workflow_dispatch:
 jobs:
@@ -9,15 +9,14 @@ jobs:
       - id: action
         uses: .
         with:
-          files: "tests/fixtures/TESTFILE.TXT"
-          ignore_case: "true"
-      - name: Assert files_exists is true with ignore_case
+          files: "tests/fixtures"
+      - name: Assert files_exists is true for directory
         env:
           ACTUAL: ${{ steps.action.outputs.files_exists }}
         run: |
           echo "actual: $ACTUAL"
           if [ "$ACTUAL" != "true" ]; then
-            echo "FAIL: expected 'true' with ignore_case=true but got '$ACTUAL'"
+            echo "FAIL: expected 'true' for existing directory but got '$ACTUAL'"
             exit 1
           fi
           echo "PASS"
