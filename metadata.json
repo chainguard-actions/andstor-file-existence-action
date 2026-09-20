@@ -1,7 +1,0 @@
-{
-  "owner": "andstor",
-  "name": "file-existence-action",
-  "visibility": "internal",
-  "description": "GitHub Action to check for file existence",
-  "block_publish": false
-}
